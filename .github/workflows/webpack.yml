@@ -55,6 +55,6 @@ jobs:
         npm i
         npm run build
         npm ci
-        npm publish
+        npm publish --access=public
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
