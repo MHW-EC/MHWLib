@@ -44,16 +44,17 @@ jobs:
           Updates and fix for better performance
         draft: false
         prerelease: false
-    - name: Publish to NPM
+    - name: Prepare Node
       uses: actions/setup-node@v2
       with:
         node-version: 14
         registry-url: https://registry.npmjs.org/
-    - run: |
+    - name: Publish to NPM
+      run: |
+        echo "${{secrets.NPM_TOKEN}}"
         npm i
         npm run build
         npm ci
         npm publish
-    - run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
