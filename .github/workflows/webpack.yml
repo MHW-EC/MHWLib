@@ -51,10 +51,10 @@ jobs:
         registry-url: https://registry.npmjs.org/
     - name: Publish to NPM
       run: |
+        echo "${{secrets.NPM_TOKEN}}"
         npm i
         npm run build
         npm ci
         npm publish
-    - run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
