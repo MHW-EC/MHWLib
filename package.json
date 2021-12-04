@@ -1,5 +1,5 @@
 {
-  "name": "@mhw/generator",
+  "name": "@enmanuel_mag/mhwlib",
   "version": "1.0.5",
   "description": "",
   "main": "./dist/mhwlib.js",
