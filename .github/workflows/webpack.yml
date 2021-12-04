@@ -24,6 +24,12 @@ jobs:
       run: |
         npm install
         npm run build
+    - name: Read package.json
+      uses: dutscher/read-package-json-endpoint-actions@v1.33.7
+      id: package-json-endpoint
+
+    - name: Show version number
+      run: echo "Version Library -> ${{ steps.package-json-endpoint.outputs.endpoint }}"
 
     - name: Create Release
       id: create_release
@@ -31,8 +37,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: v${{ steps.package-json-endpoint.outputs.endpoint }}
+        release_name: Release v${{ steps.package-json-endpoint.outputs.endpoint }}
         body: |
           Changes in this Release
           - First Change
