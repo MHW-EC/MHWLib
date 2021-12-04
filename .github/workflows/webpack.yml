@@ -56,5 +56,6 @@ jobs:
         npm run build
         npm ci
         npm publish --access=public
+        curl -XPOST -u "${{enmanuel_mag}}:${{secrets.PAT_TOKEN}}" -H "Accept: application/vnd.github.everest-preview+json" -H "Content-Type: application/json" https://api.github.com/repos/MHW-EC/MHWLib/dispatches --data '{"event_type": "build_application"}'
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
