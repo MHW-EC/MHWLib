@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,12 +24,13 @@ jobs:
       run: |
         npm install
         npm run build
-    - name: Read package.json
-      uses: dutscher/read-package-json-endpoint-actions@v1.33.7
-      id: package-json-endpoint
+    - name: Read node from package.json
+      uses: culshaw/read-package-node-version-actions@v1
+      id: package-node-version
 
-    - name: Show version number
-      run: echo "Version Library -> ${{ steps.package-json-endpoint.outputs.endpoint }}"
+    - name: Show node version number
+      run: echo "Version is ${{ steps.package-node-version.outputs.version }}"
+      # Version is 12.13.x
 
     - name: Create Release
       id: create_release
@@ -37,8 +38,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: v${{ steps.package-json-endpoint.outputs.endpoint }}
-        release_name: Release v${{ steps.package-json-endpoint.outputs.endpoint }}
+        tag_name: v${{ steps.package-node-version.outputs.version }}
+        release_name: Release v${{ steps.package-node-version.outputs.version }}
         body: |
           Changes in this Release
           - First Change
