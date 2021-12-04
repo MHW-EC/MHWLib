@@ -1,6 +1,6 @@
 {
-  "name": "mhwlib",
-  "version": "1.0.4",
+  "name": "@mhw/generator",
+  "version": "1.0.5",
   "description": "",
   "main": "./dist/mhwlib.js",
   "dependencies": {
