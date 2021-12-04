@@ -1,0 +1,46 @@
+name: NodeJS with Webpack
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        npm install
+        npm run build
+    - name: Read node from package.json
+      uses: culshaw/read-package-node-version-actions@v1
+      id: package-node-version
+
+    - name: Show node version number
+      run: echo "Version is ${{ steps.package-node-version.outputs.version }}"
+      # Version is 12.13.x
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: v${{ steps.package-node-version.outputs.version }}
+        release_name: Release v${{ steps.package-node-version.outputs.version }}
+        body: |
+          Updates and fix for better performance
+        draft: false
+        prerelease: false
