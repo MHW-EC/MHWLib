@@ -1,4 +1,4 @@
-const Generador = require('../dist/mhwlib');
+const Generador = require('../index');
 
 const listaPaquete1 = require('../src/listaPaquetes1');
 //Data for test
