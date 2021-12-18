@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The date format used is DD/MM/YYYY.
 
 
+## 1.5.0 - 18/12/2021
+### New folders
+* Changes struture of folders
+
 ## 1.0.0 - 03/12/2021
 ### Init
 * Init changes
