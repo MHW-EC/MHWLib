@@ -1,9 +1,11 @@
 const Util = require('./Util');
+const { v4: uuid } = require('uuid');
 
 class Horario {
   //Clase que se encarga de guardar paquetes con objetos materia,
   //Se encarga de validar que no colisionen antes de guardarlas
   constructor() {
+    this.uuid = uuid();
     this.materiasArr = [];
   }
 
@@ -13,6 +15,13 @@ class Horario {
 
   get materias(){
     return this.materiasArr;
+  }
+
+  toJSON() {
+    return {
+      uuid: this.uuid,
+      materias: this.materias
+    }
   }
 
   addPaquete(paquete) {
