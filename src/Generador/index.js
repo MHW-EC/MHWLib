@@ -1,13 +1,17 @@
-const Combinador = require('./Combinador');
+const async = require('async');
+const { v4 } = require('uuid')
+
 const Horario = require('./Horario');
+const Combinador = require('./Combinador');
+const { progress } = require('../firebase');
 
 class Generador {
   constructor(paquetes) {
     this.paquetes = paquetes;
     this.mapaPaquetes = new Map();
     this.permutaciones = [];
+    this.schedulesResult = [];
     this.horariosGenerados = [];
-		this.generarHorarios();
   }
 
   /**
@@ -38,8 +42,10 @@ class Generador {
 
   /**
    * Description. Genera los horarios pposibles dado las materias seleccionadas
+   * @param {(error, schedulesResult: Horario[]) => {}} callback
+   *  Funcion en el que se retornan los horarios generados
    */
-  generarHorarios() {
+  generarHorarios(callback) {
     //Crearmos los maquetes
     this.crearMapa();
 
@@ -50,9 +56,60 @@ class Generador {
     for (let [clave, valor] of this.mapaPaquetes) {
       clusters.push(valor);
     }
-
+    const uuid = v4();
     const combinaciones = new Combinador(clusters);
-    for (let idx = 0; idx < combinaciones.resultados.length; idx++) {
+    const totalIter = combinaciones.resultados.length;
+    let idx = 0;
+    return async.each(
+      combinaciones.resultados,
+      (combinacion, cback) => {
+        let numMats = 0;
+        //let materiaAnterior = null;
+        const horario = new Horario();
+        for (let idx2 = 0; idx2 < combinacion.length; idx2++) {
+          const paquete = combinacion[idx2];
+          //horario.addPaquete(paquete['paquete']) ? numMats + 1 : numMats;
+          numMats += horario.addPaquete(paquete['paquete'])
+            ? numMats + 1
+            : numMats
+            ? 1
+            : 0;
+        }
+        //if (numMats > 1) {
+        let repetido = false;
+        for (let hor of this.schedulesResult) {
+          if (horario.equals(hor)) {
+            repetido = true;
+            break;
+          }
+        }
+        if (!repetido) {
+          this.schedulesResult.push(horario);
+        }
+        const dataUpdate = {
+          uuid,
+          percentage: Math.round(((idx + 1) / totalIter) * 100),
+          payload: {
+            totalIter,
+            horarios: this.schedulesResult.map((hor)=> hor.toJSON()),
+          },
+        };
+        idx++;
+        return progress(dataUpdate, cback);
+      },
+      (err = null) =>
+        progress(
+          {
+            uuid,
+            percentage: 100,
+            payload: { totalIter, horarios: this.schedulesResult.map((hor)=> hor.toJSON()) },
+          },
+          () => callback(err, this.schedulesResult)
+        )
+    );
+
+    //Legacy
+    for (let idx = 0; idx < totalIter; idx++) {
       const combinacion = combinaciones.resultados[idx];
       let numMats = 0;
       //let materiaAnterior = null;
@@ -77,9 +134,20 @@ class Generador {
       if (!repetido) {
         this.horariosGenerados.push(horario);
       }
-      //}
     }
-    /* combinaciones.resultados.forEach((combinacion) => {
+  }
+  /**
+   * @deprecated Los horario generados se obtienen en el callback al llamar la funcion generarHorarios
+   */
+  get HorariosGenerados() {
+    throw new Error(
+      'Los horario generados se obtienen en el callback al llamar a generarHorarios'
+    );
+  }
+}
+module.exports = Generador;
+
+/* combinaciones.resultados.forEach((combinacion) => {
 			//let entroMatPrioritaria = true;
 			//let materiaAnterior = null;
 			let horario = new Horario();
@@ -95,10 +163,3 @@ class Generador {
 			}
 			if (!repetido) { this.horariosGenerados.push(horario);}
 		}); */
-  }
-
-  get horariosGenerados() {
-    return this.horariosGenerados;
-  }
-}
-module.exports = Generador;
