@@ -6,7 +6,8 @@ const Combinador = require('./Combinador');
 const { progress } = require('../firebase');
 
 class Generador {
-  constructor(paquetes) {
+  constructor(uuid, paquetes) {
+    this.uuid = uuid;
     this.paquetes = paquetes;
     this.mapaPaquetes = new Map();
     this.permutaciones = [];
@@ -56,7 +57,7 @@ class Generador {
     for (let [clave, valor] of this.mapaPaquetes) {
       clusters.push(valor);
     }
-    const uuid = v4();
+    const uuid = this.uuid;
     const combinaciones = new Combinador(clusters);
     const totalIter = combinaciones.resultados.length;
     let idx = 0;

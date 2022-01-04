@@ -1,3 +1,5 @@
 const GeneratorMHW = require('./src/Generador');
 
-module.exports = GeneratorMHW;
+module.exports = {
+  Generador: GeneratorMHW,
+};
