@@ -11,10 +11,12 @@
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^27.4.7"
+  },
   "scripts": {
     "build": "webpack --mode production --config webpack.config.js",
-    "test": "node ./test"
+    "test": "jest"
   },
   "author": "Enmanuel Magallanes  <enmanuelmag@cardor.dev>",
   "license": "ISC"

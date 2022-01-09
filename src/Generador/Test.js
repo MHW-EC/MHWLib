@@ -1,5 +1,5 @@
 const Generador = require('./Generador');
-const listaPaquete1 = require('./listaPaqueres2');
+const listaPaquete1 = require('./listaPaquetes2');
 const Combinador = require('./Combinador');
 //console.log(listaPaquete1);
 //{{A1,A2},{B1},{C1,C2}}
