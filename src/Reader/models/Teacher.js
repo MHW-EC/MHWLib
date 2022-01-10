@@ -4,34 +4,23 @@ const Schema = mongoose.Schema;
 class Teacher {
 
   static getSchema() {
-    return new Schema(
-      {
-        _id: {
+    return mongoose.model('Profesor', new Schema({
+      _id: {
           type: String
-        },
-        codigo: {
-          type: String
-        },
-        eventos: {
-          type: Object
-        },
-        nombre: {
-          type: String
-        },
-        paralelo: {
-          type: String
-        },
-        profesor: {
-          type: String
-        },
-        teorico_id: {
-          type: String
-        }
       },
-      {
-        collection: 'carrera',
+      nombre: {
+          type: String
+      },
+      registros: {
+          type: Array,
+          default: [{anio: String, codigo: String, nombreMateria: String, termino: String, promedio: Number}]
+      },
+      stats: { 
+          type:Array
       }
-    );
+  },{
+      collection: 'profesor'
+  }));
   }
 
   static getAll() {
@@ -44,8 +33,8 @@ class Teacher {
     } = queryParams;
 
     return new Promise((resolve, reject) => {
-      Teacher.getSchema().profesor
-        .aggregate(getFindBySubjectQuery(queryParams))
+      Teacher.getSchema()
+        .aggregate(Teacher.getByTeacherSubjectQuery(queryParams))
         .exec((error, data) => {
           if (error) {
             reject(error)
@@ -61,7 +50,7 @@ class Teacher {
     })
   }
 
-  static getFindBySubjectQuery(queryParams) {
+  static getByTeacherSubjectQuery(queryParams) {
     const {
       teacherName,
       subjectName,

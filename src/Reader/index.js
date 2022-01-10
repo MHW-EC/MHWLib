@@ -49,11 +49,11 @@ class Reader {
 
     const model = Models[resourceName]
     if (!model) {
-      throw new Error("Unknow resource name");
+      throw new Error("Unknown resource name");
     }
     const queryResponse = model[query]
     if (!queryResponse) {
-      throw new Error("Unknow query");
+      throw new Error("Unknown query");
     }
     try{
       return queryResponse(queryParams);

@@ -4,49 +4,38 @@ const Schema = mongoose.Schema;
 class PracticalClass {
 
   static getSchema() {
-    return new Schema(
-      {
-        _id: {
-          type: String
-        },
-        codigo: {
-          type: String
-        },
-        eventos: {
-          type: Object
-        },
-        nombre: {
-          type: String
-        },
-        paralelo: {
-          type: String
-        },
-        profesor: {
-          type: String
-        },
-        teorico_id: {
-          type: String
-        }
+    return mongoose.model('Practico', new Schema({
+      _id: {
+        type: String
       },
-      {
-        collection: 'carrera',
+      codigo: {
+        type: String
+      },
+      eventos: {
+        type: Object
+      },
+      nombre: {
+        type: String
+      },
+      paralelo: {
+        type: String
+      },
+      profesor: {
+        type: String
+      },
+      teorico_id: {
+        type: String
       }
-    );
+    }, {
+      collection: 'practico'
+    }));
   }
 
   static getAll() {
-    return new Promise((resolve, reject) => {
-      PracticalClass.getSchema().find((error, data) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(data);
-        }
-      });
-    })
+    return PracticalClass.getSchema().find();
   }
 
-  static getById(queryParams) {
+  static getByTheoryId(queryParams) {
     const {
       id
     } = queryParams;
@@ -60,5 +49,5 @@ class PracticalClass {
 
 module.exports = {
   getAll: PracticalClass.getAll,
-  getById: PracticalClass.getById
+  getByTheoryId: PracticalClass.getByTheoryId
 };
