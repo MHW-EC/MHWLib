@@ -1,21 +1,25 @@
 {
   "name": "@enmanuel_mag/mhwlib",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "",
   "main": "./index.js",
   "dependencies": {
     "async": "^3.2.2",
+    "dotenv": "^10.0.0",
     "firebase": "^9.6.1",
+    "mongoose": "^6.1.5",
     "node-os-utils": "^1.3.5",
     "uuid": "^8.3.2",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^27.4.7"
+  },
   "scripts": {
     "build": "webpack --mode production --config webpack.config.js",
-    "test": "node ./test"
+    "test": "jest"
   },
-  "author": "Enmanuel Magallanes  <enmanuelmag@cardor.dev>",
+  "author": "Enmanuel Magallanes  <enmanuelmag@cardor.dev>, Josue Cobos <josuealexandercs15@gmail.com>",
   "license": "ISC"
 }

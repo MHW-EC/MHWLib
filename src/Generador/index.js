@@ -46,7 +46,7 @@ class Generador {
    * @param {(error, schedulesResult: Horario[]) => {}} callback
    *  Funcion en el que se retornan los horarios generados
    */
-  generarHorarios(callback) {
+  generarHorarios(callback, test = false) {
     //Crearmos los maquetes
     this.crearMapa();
 
@@ -96,17 +96,23 @@ class Generador {
           },
         };
         idx++;
-        return progress(dataUpdate, cback);
+        if(!test) return progress(dataUpdate, cback);
+        return cback();
       },
-      (err = null) =>
-        progress(
-          {
-            uuid,
-            percentage: 100,
-            payload: { totalIter, horarios: this.schedulesResult.map((hor)=> hor.toJSON()) },
-          },
-          () => callback(err, this.schedulesResult)
-        )
+      (err = null) => {
+        if(!test){
+          progress(
+            {
+              uuid,
+              percentage: 100,
+              payload: { totalIter, horarios: this.schedulesResult.map((hor)=> hor.toJSON()) },
+            },
+            () => callback(err, this.schedulesResult)
+          )
+        }else{
+          callback(null,  this.schedulesResult)
+        }
+      } 
     );
 
     //Legacy
