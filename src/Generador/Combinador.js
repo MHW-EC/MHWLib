@@ -5,11 +5,11 @@ class Combinador {
     this.encontrarResultados();
   }
 
-  permutations(arreglo) {
+  static permutations(arreglo) {
     let permutaciones = [];
 
     for (let i = 0; i < arreglo.length; i = i + 1) {
-      let rest = this.permutations(
+      let rest = Combinador.permutations(
         arreglo.slice(0, i).concat(arreglo.slice(i + 1))
       );
 
@@ -23,7 +23,7 @@ class Combinador {
     }
     return permutaciones;
   }
-  cartesianProduct(a, b, ...c) {
+  static cartesianProduct(a, b, ...c) {
     //Implementacion de producto cartesiano
     const concatCallBack = (a, b) =>
       [].concat(...a.map((d) => b.map((e) => [].concat(d, e))));
@@ -36,7 +36,7 @@ class Combinador {
 
   encontrarResultados() {
     //Obtengo las permutaciones de los grupos de materias
-    let permutaciones = this.permutations(this.clusters);
+    let permutaciones = Combinador.permutations(this.clusters);
 
     if (permutaciones.length === 1) {
       //console.log(permutaciones)
@@ -44,7 +44,7 @@ class Combinador {
     } //parche 1 sola materia
 
     for (let idx = 0; idx < permutaciones.length; idx++) {
-      const producotCartesiano = this.cartesianProduct(...permutaciones[idx]);
+      const producotCartesiano = Combinador.cartesianProduct(...permutaciones[idx]);
       for (let index = 0; index < producotCartesiano.length; index++) {
         const producto = producotCartesiano[index];
         this.resultados.push(producto);

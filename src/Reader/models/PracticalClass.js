@@ -46,22 +46,18 @@ class PracticalClass {
     })
   }
 
-  static getById(id) {
-    return new Promise((resolve, reject) => {
-      PracticalClass.getSchema().find(
-        {
-          'teorico_id': id
-        },
-        (error, data) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(data);
-          }
-      });
-    })
+  static getById(queryParams) {
+    const {
+      id
+    } = queryParams;
+    return PracticalClass.getSchema().find(
+      {
+        'teorico_id': id
+      }
+    );
   }
 };
+
 module.exports = {
   getAll: PracticalClass.getAll,
   getById: PracticalClass.getById

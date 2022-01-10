@@ -35,23 +35,17 @@ class Teacher {
   }
 
   static getAll() {
-    return new Promise((resolve, reject) => {
-      Teacher.getSchema().find((error, data) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(data);
-        }
-      });
-    })
+    return Teacher.getSchema().find();
   }
 
-  static getBySubject(parameters) {
-    const { teacherName } = parameters; 
+  static getBySubject(queryParams) {
+    const {
+      teacherName
+    } = queryParams;
 
     return new Promise((resolve, reject) => {
       Teacher.getSchema().profesor
-        .aggregate(getFindBySubjectQuery(parameters))
+        .aggregate(getFindBySubjectQuery(queryParams))
         .exec((error, data) => {
           if (error) {
             reject(error)
@@ -59,7 +53,7 @@ class Teacher {
             resolve(data[0])
           } else {
             resolve({
-              "nombre": req.params.profesor,
+              "nombre": teacherName,
               "registros": [{ 'promedio': 0 }]
             })
           }
@@ -67,12 +61,13 @@ class Teacher {
     })
   }
 
-  static getFindBySubjectQuery(parameters) {
+  static getFindBySubjectQuery(queryParams) {
     const {
       teacherName,
       subjectName,
       subjectCode,
-    } = parameters;
+    } = queryParams;
+
     return [
       {
         $match: {
@@ -110,6 +105,7 @@ class Teacher {
     ]
   }
 };
+
 module.exports = {
   getAll: Teacher.getAll,
   getBySubject: Teacher.getBySubject

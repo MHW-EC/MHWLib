@@ -4,8 +4,8 @@ var Teacher = require("./Teacher")
 var TheoryClass = require("./TheoryClass")
 
 module.exports = {
-    Career,
-    PracticalClass,
-    Teacher,
-    TheoryClass
+  Career,
+  PracticalClass,
+  Teacher,
+  TheoryClass
 }

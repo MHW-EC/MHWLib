@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 class Career {
 
   static getSchema() {
-    return new Schema(
+    return mongoose.model('Carrera', new Schema(
       {
         _id: {
           type: Object,
@@ -22,21 +22,14 @@ class Career {
       {
         collection: 'carrera',
       }
-    );
+    ));
   }
 
   static getAll() {
-    return new Promise((resolve, reject) => {
-      Career.getSchema().find((error, data) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(data);
-        }
-      });
-    })
+    return Career.getSchema().find();
   }
 };
+
 module.exports = {
   getAll: Career.getAll
 };

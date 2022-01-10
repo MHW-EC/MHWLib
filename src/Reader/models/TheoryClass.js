@@ -26,44 +26,27 @@ class TheoryClass {
   }
 
   static getAll() {
-    return new Promise((resolve, reject) => {
-      TheoryClass.getSchema().find((error, data) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(data);
-        }
-      });
-    })
+    return TheoryClass.getSchema().find();
   }
 
-  static getByClassCode(classCode) {
-    return new Promise((resolve, reject) => {
-      TheoryClass.getSchema().find(
-        {
-          codigo: classCode
-        },
-        (error, data) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(data);
-          }
-        });
-    })
+  static getByClassCode(queryParams) {
+    const {
+      classCode
+    } = queryParams;
+    return TheoryClass.getSchema().find(
+      {
+        codigo: classCode
+      }
+    );
   }
 
-  static getStatsByCode(classCode) {
-    return new Promise((resolve, reject) => {
-      TheoryClass.getSchema().aggregate(TheoryClass.getStatsQuery(classCode))
-        .exec((error, data) => {
-          if(error){
-            reject(error)
-          } else{
-            resolve(data);
-          }
-        })
-      });
+  static getStatsByCode(queryParams) {
+    const {
+      classCode
+    } = queryParams;
+    return TheoryClass.getSchema()
+    .aggregate(TheoryClass.getStatsQuery(classCode))
+    .exec();
   }
 
   static getStatsQuery(classCode) {
@@ -173,6 +156,7 @@ class TheoryClass {
     ]
   }
 };
+
 module.exports = {
   getAll: TheoryClass.getAll,
   getByClassCode: TheoryClass.getByClassCode

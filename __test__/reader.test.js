@@ -1,4 +1,4 @@
-var Reader = require('./../../src/Reader/index');
+var Reader = require('./../src/Reader');
 
 test('getResourceData - Error', async () => {
   const args0 = {
@@ -26,5 +26,5 @@ test('getResourceData - Success', async () => {
     query: "getAll"
   }
   await expect(Reader.getResourceData(args1))
-    .resolves.toBe(300)
+    .resolves.toBeInstanceOf(Array)
 })
