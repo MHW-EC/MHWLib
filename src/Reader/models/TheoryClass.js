@@ -4,25 +4,31 @@ const Schema = mongoose.Schema;
 class TheoryClass {
 
   static getSchema() {
-    return new Schema(
-      {
-        _id: {
-          type: Object,
-        },
-        nombre: {
-          type: String,
-        },
-        facultad: {
-          type: String,
-        },
-        materias: {
-          type: Array,
-        },
+    return mongoose.model('Teorico', new Schema({
+      _id: {
+        type: String
       },
-      {
-        collection: 'carrera',
+      codigo: {
+        type: String
+      },
+      eventos: {
+        type: Object
+      },
+      nombre: {
+        type: String
+      },
+      paralelo: {
+        type: String
+      },
+      paralelos_practico: {
+        type: Array
+      },
+      profesor: {
+        type: String
       }
-    );
+    }, {
+      collection: 'teorico'
+    }));
   }
 
   static getAll() {
@@ -45,8 +51,8 @@ class TheoryClass {
       classCode
     } = queryParams;
     return TheoryClass.getSchema()
-    .aggregate(TheoryClass.getStatsQuery(classCode))
-    .exec();
+      .aggregate(TheoryClass.getStatsQuery(classCode))
+      .exec();
   }
 
   static getStatsQuery(classCode) {
