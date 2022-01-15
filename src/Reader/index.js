@@ -2,33 +2,34 @@
 var Models = require('./models');
 var mongoose = require('mongoose')
 var path = require('path')
+var util = require('util');
 
 class Reader {
 
   static async connectDatabase() {
-    
-    
     require('dotenv').config({
       path: path.join(__dirname, '..', '..', '.env') 
     });
-    console.log('process.env.DB_URI', process.env.DB_URI)
-    console.log('process.env.DB_NAME', process.env.DB_NAME)
 
-    console.log("returning promise connectDatabase")
-    return mongoose
-    .connect(process.env.DB_URI, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      dbName: process.env.DB_NAME,
-    });
+    return new Promise((resolve) => {
+      mongoose
+      .connect(process.env.DB_URI, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        dbName: process.env.DB_NAME,
+      })
+      .then(
+        () => {
+          resolve(true)
+        },
+        () => {
+          resolve(false)
+        }
+      )
+    })
   }
 
-  static async getResourceData(parameters) {
-    console.log("start getResourceData")
-    const connectedDatabase = await Reader.connectDatabase();
-    if(!connectedDatabase) throw new Error("No database connected");  
-
-    console.log("validating parameters");
+  static parametersValidation(parameters) {
     const {
       resourceName,
       query,
@@ -50,13 +51,66 @@ class Reader {
     if (!queryResponse) {
       throw new Error("Unknown query");
     }
+    return [queryResponse, queryParams]
+  }
+
+  static async getResourceData(parameters) {
+    console.log("start getResourceData")
+
+    const connectedDatabase = await Reader.connectDatabase();
+    if(!connectedDatabase) throw new Error("No database connected");  
+    console.log("Database connected")
+
+    console.log("validating parameters");
+    const [queryResponse, queryParams] = Reader.parametersValidation(parameters)
+    
     try{
       console.log("awaiting query response");
-      return queryResponse(queryParams);
+      return await queryResponse(queryParams);
     }catch(error){
       console.log(error);
       throw new Error("Query execution error");
     }
+  }
+  static getResourceDataByCb(parameters, callBack) {
+
+    console.log("start getResourceDataByCb")
+    require('dotenv').config({
+      path: path.join(__dirname, '..', '..', '.env') 
+    });
+
+    mongoose.connect(
+      process.env.DB_URI, 
+      {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        dbName: process.env.DB_NAME,
+      },
+      (error) => {
+        if(error){
+          console.log("No database connected")
+          return callBack(error);
+        }
+        console.log("Database connected");
+        try{
+          const [queryResponse, queryParams] = Reader.parametersValidation(parameters)
+          console.log("Valid parameters");
+          
+          const queryResponseCbFun = util.callbackify(queryResponse);
+          queryResponseCbFun(
+            queryParams,
+            (error, response) => {
+              if(error){
+                console.log("Error getting resource");
+                return callBack(error);
+              }
+              console.log("Returning resources");
+              return callBack(null, response);
+          });
+        }catch(error){
+          return callBack(null, error);
+        }
+      })
   }
 }
 module.exports = Reader;
