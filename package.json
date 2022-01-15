@@ -1,6 +1,6 @@
 {
   "name": "@enmanuel_mag/mhwlib",
-  "version": "1.9.16",
+  "version": "1.9.17",
   "description": "",
   "main": "./index.js",
   "dependencies": {

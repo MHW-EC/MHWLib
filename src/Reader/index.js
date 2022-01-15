@@ -66,7 +66,7 @@ class Reader {
     
     try{
       console.log("awaiting query response");
-      return await queryResponse(queryParams);
+      return queryResponse(queryParams);
     }catch(error){
       console.log(error);
       throw new Error("Query execution error");
