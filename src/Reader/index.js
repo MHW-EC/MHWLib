@@ -6,12 +6,14 @@ var path = require('path')
 class Reader {
 
   static async connectDatabase() {
-    console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-    if (process.env.NODE_ENV !== 'production') {
-      require('dotenv').config({
-        path: path.join(__dirname, '..', '..', '.env') 
-      });
-    }
+    
+    
+    require('dotenv').config({
+      path: path.join(__dirname, '..', '..', '.env') 
+    });
+    console.log('process.env.DB_URI', process.env.DB_URI)
+    console.log('process.env.DB_NAME', process.env.DB_NAME)
+    
     console.log("returning promise connectDatabase")
     return new Promise((resolve) => {
       mongoose
