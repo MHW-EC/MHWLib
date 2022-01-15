@@ -13,24 +13,14 @@ class Reader {
     });
     console.log('process.env.DB_URI', process.env.DB_URI)
     console.log('process.env.DB_NAME', process.env.DB_NAME)
-    
+
     console.log("returning promise connectDatabase")
-    return new Promise((resolve) => {
-      mongoose
-      .connect(process.env.DB_URI, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        dbName: process.env.DB_NAME,
-      })
-      .then(
-        () => {
-          resolve(true)
-        },
-        () => {
-          resolve(false)
-        }
-      )
-    })
+    return mongoose
+    .connect(process.env.DB_URI, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      dbName: process.env.DB_NAME,
+    });
   }
 
   static async getResourceData(parameters) {
