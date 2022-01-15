@@ -6,11 +6,13 @@ var path = require('path')
 class Reader {
 
   static async connectDatabase() {
+    console.log('process.env.NODE_ENV', process.env.NODE_ENV)
     if (process.env.NODE_ENV !== 'production') {
       require('dotenv').config({
         path: path.join(__dirname, '..', '..', '.env') 
       });
     }
+    console.log("returning promise connectDatabase")
     return new Promise((resolve) => {
       mongoose
       .connect(process.env.DB_URI, {
@@ -30,10 +32,11 @@ class Reader {
   }
 
   static async getResourceData(parameters) {
-
+    console.log("start getResourceData")
     const connectedDatabase = await Reader.connectDatabase();
     if(!connectedDatabase) throw new Error("No database connected");  
 
+    console.log("validating parameters");
     const {
       resourceName,
       query,
@@ -56,6 +59,7 @@ class Reader {
       throw new Error("Unknown query");
     }
     try{
+      console.log("awaiting query response");
       return queryResponse(queryParams);
     }catch(error){
       console.log(error);
