@@ -79,7 +79,7 @@ class Reader {
       path: path.join(__dirname, '..', '..', '.env') 
     });
 
-    mongoose.connect(
+    return mongoose.connect(
       process.env.DB_URI, 
       {
         useUnifiedTopology: true,
