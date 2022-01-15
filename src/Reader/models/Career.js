@@ -28,8 +28,20 @@ class Career {
   static getAll() {
     return Career.getSchema().find();
   }
+
+  static getAllCb(_, callBack) {
+    Career.getSchema().find(
+      (error, docs) => {
+        if(error){
+          return callBack(error);
+        }
+        return callBack(null, docs)
+      });
+  }
+
 };
 
 module.exports = {
-  getAll: Career.getAll
+  getAll: Career.getAll,
+  getAllCb: Career.getAllCb
 };

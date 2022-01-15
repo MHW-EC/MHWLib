@@ -29,7 +29,7 @@ class Reader {
     })
   }
 
-  static parametersValidation(parameters) {
+  static parametersValidation(parameters, callBack) {
     const {
       resourceName,
       query,
@@ -72,6 +72,7 @@ class Reader {
       throw new Error("Query execution error");
     }
   }
+
   static getResourceDataByCb(parameters, callBack) {
 
     console.log("start getResourceDataByCb")
@@ -93,20 +94,17 @@ class Reader {
         }
         console.log("Database connected");
         try{
-          const [queryResponse, queryParams] = Reader.parametersValidation(parameters)
+          const [queryResponse, queryParams] = Reader.parametersValidation(parameters, callBack)
           console.log("Valid parameters");
           
-          const queryResponseCbFun = util.callbackify(queryResponse);
-          queryResponseCbFun(
-            queryParams,
-            (error, response) => {
-              if(error){
-                console.log("Error getting resource");
-                return callBack(error);
-              }
-              console.log("Returning resources");
-              return callBack(null, response);
-          });
+          queryResponse(queryParams, (error, response) => {
+            if(error){
+              console.log("Error getting resource");
+              return callBack(error);
+            }
+            console.log("Returning resources");
+            return callBack(null, response);
+          })
         }catch(error){
           return callBack(error);
         }
