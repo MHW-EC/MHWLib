@@ -108,7 +108,7 @@ class Reader {
               return callBack(null, response);
           });
         }catch(error){
-          return callBack(null, error);
+          return callBack(error);
         }
       })
   }
