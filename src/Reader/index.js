@@ -97,7 +97,7 @@ class Reader {
           const [queryResponse, queryParams] = Reader.parametersValidation(parameters, callBack)
           console.log("Valid parameters");
           
-          queryResponse(queryParams, (error, response) => {
+          return queryResponse(queryParams, (error, response) => {
             if(error){
               console.log("Error getting resource");
               return callBack(error);
