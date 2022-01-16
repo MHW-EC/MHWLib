@@ -34,10 +34,13 @@ class Reader {
       queryParams = {}
     } = parameters;
 
-    if (!resourceName ||
-      !query ||
+    if (
+      !resourceName ||
       resourceName == "" ||
-      query == "") {
+      !query ||
+      query == ""
+    ) {
+      console.log("Invalid parameters", parameters);
       throw new Error("Missing parameters");
     }
 
@@ -53,7 +56,7 @@ class Reader {
   }
 
   static async getResourceData(parameters) {
-    console.log("start getResourceData without callback");
+    console.log("start getResourceData without callback", parameters);
 
     const connectedDatabase = await Reader.connectDatabase();
     if(!connectedDatabase) throw new Error("No database connected");  
