@@ -27,7 +27,7 @@ class Reader {
     
   }
 
-  static parametersValidation(parameters, callBack) {
+  static parametersValidation(parameters) {
     const {
       resourceName,
       query,
@@ -35,12 +35,12 @@ class Reader {
     } = parameters;
 
     if (
-      !resourceName ||
-      resourceName == "" ||
-      !query ||
-      query == ""
+      !query?.length ||
+      !resourceName?.length
     ) {
-      console.log("Invalid parameters", parameters);
+      console.log("Invalid parameters", typeof parameters);
+      console.log('resourceName', resourceName);
+      console.log('query', query);
       throw new Error("Missing parameters");
     }
 
