@@ -9,20 +9,15 @@ class Reader {
   static async connectDatabase() {
     console.log('process.env.DB_URI', process.env.DB_URI);
     console.log('process.env.DB_NAME', process.env.DB_NAME);
-    return new Promise((resolve) => {
-      mongoose
-      .connect(process.env.DB_URI, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        dbName: process.env.DB_NAME,
-      })
-      .then(() => resolve(true))
-      .catch(
-        (err) => {
-          console.log('Error DB JOSUE:', err);
-          return resolve(false);
-      })
+    await mongoose
+    .connect(process.env.DB_URI, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      dbName: process.env.DB_NAME,
     });
+
+    return true;
+    
   }
 
   static parametersValidation(parameters, callBack) {
