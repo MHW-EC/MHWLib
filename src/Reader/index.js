@@ -7,10 +7,8 @@ var util = require('util');
 class Reader {
 
   static async connectDatabase() {
-    require('dotenv').config({
-      path: path.join(__dirname, '..', '..', '.env') 
-    });
-
+    console.log('process.env.DB_URI', process.env.DB_URI);
+    console.log('process.env.DB_NAME', process.env.DB_NAME);
     return new Promise((resolve) => {
       mongoose
       .connect(process.env.DB_URI, {
@@ -18,15 +16,13 @@ class Reader {
         useNewUrlParser: true,
         dbName: process.env.DB_NAME,
       })
-      .then(
-        () => {
-          resolve(true)
-        },
-        () => {
-          resolve(false)
-        }
-      )
-    })
+      .then(() => resolve(true))
+      .catch(
+        (err) => {
+          console.log('Error DB JOSUE:', err);
+          return resolve(false);
+      })
+    });
   }
 
   static parametersValidation(parameters, callBack) {
@@ -55,7 +51,7 @@ class Reader {
   }
 
   static async getResourceData(parameters) {
-    console.log("start getResourceData")
+    console.log("start getResourceData without callback");
 
     const connectedDatabase = await Reader.connectDatabase();
     if(!connectedDatabase) throw new Error("No database connected");  
