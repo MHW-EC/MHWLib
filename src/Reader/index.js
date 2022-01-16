@@ -7,6 +7,7 @@ var util = require('util');
 class Reader {
 
   static async connectDatabase() {
+    
     console.log('process.env.DB_URI', process.env.DB_URI);
     console.log('process.env.DB_NAME', process.env.DB_NAME);
     try {
@@ -14,8 +15,7 @@ class Reader {
       .connect(process.env.DB_URI, {
         useUnifiedTopology: true,
         useNewUrlParser: true,
-        dbName: process.env.DB_NAME,
-        serverSelectionTimeoutMS: 5000,
+        dbName: process.env.DB_NAME
       });
       return true;
     } catch (error) {
