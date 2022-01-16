@@ -4,25 +4,26 @@ const Schema = mongoose.Schema;
 class Career {
 
   static getSchema() {
-    return mongoose.model('Carrera', new Schema(
-      {
-        _id: {
-          type: Object,
+    return mongoose.models.Carrera ||
+      mongoose.model('Carrera', new Schema(
+        {
+          _id: {
+            type: Object,
+          },
+          nombre: {
+            type: String,
+          },
+          facultad: {
+            type: String,
+          },
+          materias: {
+            type: Array,
+          },
         },
-        nombre: {
-          type: String,
-        },
-        facultad: {
-          type: String,
-        },
-        materias: {
-          type: Array,
-        },
-      },
-      {
-        collection: 'carrera',
-      }
-    ));
+        {
+          collection: 'carrera',
+        }
+      ));
   }
 
   static getAll() {
@@ -32,7 +33,7 @@ class Career {
   static getAllCb(_, callBack) {
     Career.getSchema().find(
       (error, docs) => {
-        if(error){
+        if (error) {
           return callBack(error);
         }
         return callBack(null, docs)

@@ -4,23 +4,24 @@ const Schema = mongoose.Schema;
 class Teacher {
 
   static getSchema() {
-    return mongoose.model('Profesor', new Schema({
-      _id: {
+    return mongoose.models.Profesor ||
+      mongoose.model('Profesor', new Schema({
+        _id: {
           type: String
-      },
-      nombre: {
+        },
+        nombre: {
           type: String
-      },
-      registros: {
+        },
+        registros: {
           type: Array,
-          default: [{anio: String, codigo: String, nombreMateria: String, termino: String, promedio: Number}]
-      },
-      stats: { 
-          type:Array
-      }
-  },{
-      collection: 'profesor'
-  }));
+          default: [{ anio: String, codigo: String, nombreMateria: String, termino: String, promedio: Number }]
+        },
+        stats: {
+          type: Array
+        }
+      }, {
+        collection: 'profesor'
+      }));
   }
 
   static getAll() {
@@ -38,7 +39,7 @@ class Teacher {
         .exec((error, data) => {
           if (error) {
             reject(error)
-          } else if (data.length >= 1){
+          } else if (data.length >= 1) {
             resolve(data[0])
           } else {
             resolve({
