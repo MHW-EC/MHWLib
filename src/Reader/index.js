@@ -9,14 +9,21 @@ class Reader {
   static async connectDatabase() {
     console.log('process.env.DB_URI', process.env.DB_URI);
     console.log('process.env.DB_NAME', process.env.DB_NAME);
-    await mongoose
-    .connect(process.env.DB_URI, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      dbName: process.env.DB_NAME,
-    });
-
-    return true;
+    try {
+      await mongoose
+      .connect(process.env.DB_URI, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        dbName: process.env.DB_NAME,
+        serverSelectionTimeoutMS: 5000,
+      });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+    
+    
     
   }
 
