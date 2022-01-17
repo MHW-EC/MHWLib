@@ -1,5 +1,5 @@
 const async = require('async');
-const { v4 } = require('uuid')
+const { v4 } = require('uuid');
 
 const Horario = require('./Horario');
 const Combinador = require('./Combinador');
@@ -105,29 +105,36 @@ class Generador {
           percentage: Math.round(((idx + 1) / totalIter) * 100),
           payload: {
             totalIter,
-            horarios: this.schedulesResult.map((hor)=> hor.toJSON()),
+            horarios: this.schedulesResult.map((hor) => hor.toJSON()),
           },
         };
         idx++;
-        if(!test) return progress(dataUpdate, cback);
+        if (!test && (idx % 10) === 0) return progress(dataUpdate, cback);
         return cback();
       },
       (err = null) => {
         console.log('Finished generating schedules');
         console.log = this.originalLog;
-        if(!test){
-          progress(
-            {
-              uuid,
-              percentage: 100,
-              payload: { totalIter, horarios: this.schedulesResult.map((hor)=> hor.toJSON()) },
-            },
-            () => callback(err, this.schedulesResult)
-          )
-        }else{
-          callback(null,  this.schedulesResult)
+        if (!test) {
+          return setTimeout(
+            () =>
+              progress(
+                {
+                  uuid,
+                  percentage: 100,
+                  payload: {
+                    totalIter,
+                    horarios: this.schedulesResult.map((hor) => hor.toJSON()),
+                  },
+                },
+                () => callback(err, this.schedulesResult)
+              ),
+            1000
+          );
+        } else {
+          callback(null, this.schedulesResult);
         }
-      } 
+      }
     );
   }
   /**
