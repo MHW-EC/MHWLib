@@ -69,9 +69,11 @@ class Generador {
       clusters.push(valor);
     }
     const uuid = this.uuid;
+    console.log('Creating combinations');
     const combinaciones = new Combinador(clusters);
     const totalIter = combinaciones.resultados.length;
     let idx = 0;
+    console.log('Starting to generate schedules');
     return async.each(
       combinaciones.resultados,
       (combinacion, cback) => {
@@ -111,7 +113,7 @@ class Generador {
         return cback();
       },
       (err = null) => {
-        console.log('Finished');
+        console.log('Finished generating schedules');
         console.log = this.originalLog;
         if(!test){
           progress(
