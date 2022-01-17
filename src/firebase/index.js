@@ -38,9 +38,7 @@ const progress = async ({ uuid, percentage, payload }, callback) => {
     percentage,
     createdAt: Timestamp.now(),
   };
-  console.log('Data update: ', dataUpdate);
   setDoc(docRef, dataUpdate, { merge: true })
-    .then((res) => console.log('Document successfully written!', res))
     .catch((error) => console.log('Error writing document: ', error))
     .finally(() => callback());
 };

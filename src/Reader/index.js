@@ -56,6 +56,12 @@ class Reader {
   }
 
   static async getResourceData(parameters) {
+    const consoleLog = console.log;
+    console.log = function (...args) {
+      args.unshift('[ LIBRARY ]');
+      consoleLog.apply(console, args);
+    };
+
     console.log("start getResourceData without callback", parameters);
 
     const connectedDatabase = await Reader.connectDatabase();
@@ -71,45 +77,12 @@ class Reader {
     }catch(error){
       console.log(error);
       throw new Error("Query execution error");
+    } finally {
+      console.log("Closing database");
+      mongoose.connection.close();
+      console.log = consoleLog;
     }
   }
 
-  static getResourceDataByCb(parameters, callBack) {
-
-    console.log("start getResourceDataByCb")
-    require('dotenv').config({
-      path: path.join(__dirname, '..', '..', '.env') 
-    });
-
-    return mongoose.connect(
-      process.env.DB_URI, 
-      {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        dbName: process.env.DB_NAME,
-      },
-      (error) => {
-        if(error){
-          console.log("No database connected")
-          return callBack(error);
-        }
-        console.log("Database connected");
-        try{
-          const [queryResponse, queryParams] = Reader.parametersValidation(parameters, callBack)
-          console.log("Valid parameters");
-          
-          return queryResponse(queryParams, (error, response) => {
-            if(error){
-              console.log("Error getting resource");
-              return callBack(error);
-            }
-            console.log("Returning resources");
-            return callBack(null, response);
-          })
-        }catch(error){
-          return callBack(error);
-        }
-      })
-  }
 }
 module.exports = Reader;

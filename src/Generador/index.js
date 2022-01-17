@@ -13,6 +13,16 @@ class Generador {
     this.permutaciones = [];
     this.schedulesResult = [];
     this.horariosGenerados = [];
+    this.originalLog = console.log;
+    console.log = this.overwriteLogs();
+  }
+
+  overwriteLogs() {
+    const consoleLog = console.log;
+    return function (...args) {
+      args.unshift('[ LIBRARY ]');
+      consoleLog.apply(console, args);
+    };
   }
 
   /**
@@ -100,6 +110,7 @@ class Generador {
         return cback();
       },
       (err = null) => {
+        console.log = this.originalLog;
         if(!test){
           progress(
             {
@@ -114,34 +125,6 @@ class Generador {
         }
       } 
     );
-
-    //Legacy
-    for (let idx = 0; idx < totalIter; idx++) {
-      const combinacion = combinaciones.resultados[idx];
-      let numMats = 0;
-      //let materiaAnterior = null;
-      const horario = new Horario();
-      for (let idx2 = 0; idx2 < combinacion.length; idx2++) {
-        const paquete = combinacion[idx2];
-        //horario.addPaquete(paquete['paquete']) ? numMats + 1 : numMats;
-        numMats += horario.addPaquete(paquete['paquete'])
-          ? numMats + 1
-          : numMats
-          ? 1
-          : 0;
-      }
-      //if (numMats > 1) {
-      let repetido = false;
-      for (let hor of this.horariosGenerados) {
-        if (horario.equals(hor)) {
-          repetido = true;
-          break;
-        }
-      }
-      if (!repetido) {
-        this.horariosGenerados.push(horario);
-      }
-    }
   }
   /**
    * @deprecated Los horario generados se obtienen en el callback al llamar la funcion generarHorarios
@@ -153,20 +136,3 @@ class Generador {
   }
 }
 module.exports = Generador;
-
-/* combinaciones.resultados.forEach((combinacion) => {
-			//let entroMatPrioritaria = true;
-			//let materiaAnterior = null;
-			let horario = new Horario();
-			combinacion.forEach((paquete) => {
-				horario.addPaquete(paquete['paquete']);
-			});
-			let repetido = false;
-			for (let hor of this.horariosGenerados) {
-				if (horario.equals(hor)) {
-					repetido = true;
-					break;
-				}
-			}
-			if (!repetido) { this.horariosGenerados.push(horario);}
-		}); */
