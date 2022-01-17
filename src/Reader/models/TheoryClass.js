@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 class TheoryClass {
 
   static getSchema() {
-    return mongoose.model('Teorico', new Schema({
+    return mongoose.models.Teorico ||
+    mongoose.model('Teorico', new Schema({
       _id: {
         type: String
       },

@@ -4,31 +4,32 @@ const Schema = mongoose.Schema;
 class PracticalClass {
 
   static getSchema() {
-    return mongoose.model('Practico', new Schema({
-      _id: {
-        type: String
-      },
-      codigo: {
-        type: String
-      },
-      eventos: {
-        type: Object
-      },
-      nombre: {
-        type: String
-      },
-      paralelo: {
-        type: String
-      },
-      profesor: {
-        type: String
-      },
-      teorico_id: {
-        type: String
-      }
-    }, {
-      collection: 'practico'
-    }));
+    return mongoose.models.Practico ||
+      mongoose.model('Practico', new Schema({
+        _id: {
+          type: String
+        },
+        codigo: {
+          type: String
+        },
+        eventos: {
+          type: Object
+        },
+        nombre: {
+          type: String
+        },
+        paralelo: {
+          type: String
+        },
+        profesor: {
+          type: String
+        },
+        teorico_id: {
+          type: String
+        }
+      }, {
+        collection: 'practico'
+      }));
   }
 
   static getAll() {
