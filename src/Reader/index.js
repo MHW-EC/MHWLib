@@ -56,6 +56,11 @@ class Reader {
   }
 
   static async getResourceData(parameters) {
+    const consoleLog = console.log;
+    console.log = function (...args) {
+      args.unshift('[ LIBRARY ]');
+      consoleLog.apply(console, args);
+    };
 
     console.log("start getResourceData without callback", parameters);
 
@@ -75,6 +80,7 @@ class Reader {
     } finally {
       console.log("Closing database");
       mongoose.connection.close();
+      console.log = consoleLog;
     }
   }
 
