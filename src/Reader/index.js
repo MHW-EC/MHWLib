@@ -78,8 +78,6 @@ class Reader {
       console.log(error);
       throw new Error("Query execution error");
     } finally {
-      console.log("Closing database");
-      mongoose.connection.close();
       console.log = consoleLog;
     }
   }
