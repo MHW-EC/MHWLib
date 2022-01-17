@@ -28,7 +28,6 @@ const dataConverter = {
 };
 
 const progress = async ({ uuid, percentage, payload }, callback) => {
-  console.log('uuid', uuid);
   //update doc with uid with percentage and payload fields
   const docRef = doc(db, 'geneated-schedules', uuid).withConverter(
     dataConverter
