@@ -13,16 +13,6 @@ class Generador {
     this.permutaciones = [];
     this.schedulesResult = [];
     this.horariosGenerados = [];
-    this.originalLog = console.log;
-    console.log = this.overwriteLogs();
-  }
-
-  overwriteLogs() {
-    const consoleLog = console.log;
-    return function (...args) {
-      args.unshift('[ LIBRARY ]');
-      consoleLog.apply(console, args);
-    };
   }
 
   /**
@@ -110,7 +100,6 @@ class Generador {
         return cback();
       },
       (err = null) => {
-        console.log = this.originalLog;
         if(!test){
           progress(
             {
