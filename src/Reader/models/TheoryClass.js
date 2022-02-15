@@ -162,9 +162,59 @@ class TheoryClass {
       { $sort: { 'score': -1 } }
     ]
   }
+
+  static getTotalOfRecords(queryParams) {
+    const filters = {}
+    const {
+      target = ""
+    } = queryParams;
+    const orConditions = [];
+    if(target) {
+      const regexTarget = new RegExp(target, 'i');
+      orConditions.push({nombre: regexTarget})
+      orConditions.push({codigo: regexTarget})
+      orConditions.push({profesor: regexTarget})
+    }
+    console.log({orConditions});
+    
+    if(orConditions.length) filters['$or'] = orConditions;
+    console.log({filters})
+    return TheoryClass.getSchema().find(filters).count();
+  }
+
+  static getByQuery(queryParams, projectedFields) {
+    const filters = {}
+    const pagination = {}
+    const toProject = projectedFields.join(" "); 
+    const {
+      target = "",
+      pagination: {
+        from, pageSize
+      } = {}
+    } = queryParams;
+    const orConditions = [];
+    if(target) {
+      const regexTarget = new RegExp(target, 'i');
+      orConditions.push({nombre: regexTarget})
+      orConditions.push({codigo: regexTarget})
+      orConditions.push({profesor: regexTarget})
+    }
+    if(from != undefined &&
+      pageSize != undefined){
+      pagination.skip = from
+      pagination.limit = pageSize
+    }
+    console.log({orConditions});
+    
+    if(orConditions.length) filters['$or'] = orConditions;
+    console.log({filters})
+    return TheoryClass.getSchema().find(filters, toProject, pagination);
+  }
 };
 
 module.exports = {
   getAll: TheoryClass.getAll,
-  getByClassCode: TheoryClass.getByClassCode
+  getByClassCode: TheoryClass.getByClassCode,
+  getByQuery: TheoryClass.getByQuery,
+  getTotalOfRecords: TheoryClass.getTotalOfRecords
 };

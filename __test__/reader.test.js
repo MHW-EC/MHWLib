@@ -1,13 +1,14 @@
 var Reader = require('./../src/Reader');
-var mongoose = require('mongoose')
+var path = require('path')
+require('dotenv').config({
+  path: path.join(__dirname, '..', '.env') 
+});
 
 beforeAll(done => {
   done()
 })
 
 afterEach(done => {
-  // Closing the DB connection allows Jest to exit successfully.
-  mongoose.connection.close()
   done()
 })
 
@@ -58,10 +59,6 @@ describe('Reader', () => {
       });
     })
     describe('Teacher', () => {
-      afterEach(done => {
-        delete mongoose.connection.models['Profesor']; 
-        done()
-      })
       test('should return an array of teachers', async () => {
         const teachers = await Reader.getResourceData({
           resourceName: 'Teacher',
@@ -87,10 +84,6 @@ describe('Reader', () => {
       });
     })
     describe('TheoryClass', () => {
-      afterEach(done => {
-        delete mongoose.connection.models['Teorico']; 
-        done()
-      })
       test('should return an array of theory classes', async () => {
         const theoryClasses = await Reader.getResourceData({
           resourceName: 'TheoryClass',
@@ -112,10 +105,6 @@ describe('Reader', () => {
       });
     })
     describe('PracticalClass', () => {
-      afterEach(done => {
-        delete mongoose.connection.models['Practico']; 
-        done()
-      })
       test('should return an array of practical classes', async () => {
         const practicalClasses = await Reader.getResourceData({
           resourceName: 'PracticalClass',

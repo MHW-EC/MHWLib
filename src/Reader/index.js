@@ -1,13 +1,10 @@
 
 var Models = require('./models');
 var mongoose = require('mongoose')
-var path = require('path')
-var util = require('util');
 
 class Reader {
 
   static async connectDatabase() {
-    
     console.log('process.env.DB_URI', process.env.DB_URI);
     console.log('process.env.DB_NAME', process.env.DB_NAME);
     try {
@@ -22,16 +19,14 @@ class Reader {
       console.log(error);
       return false;
     }
-    
-    
-    
   }
 
   static parametersValidation(parameters) {
     const {
       resourceName,
       query,
-      queryParams = {}
+      queryParams = {},
+      projectedFields = []
     } = parameters;
 
     if (
@@ -52,7 +47,7 @@ class Reader {
     if (!queryResponse) {
       throw new Error("Unknown query");
     }
-    return [queryResponse, queryParams]
+    return [queryResponse, queryParams, projectedFields]
   }
 
   static async getResourceData(parameters) {
@@ -69,16 +64,21 @@ class Reader {
     console.log("Database connected")
 
     console.log("validating parameters");
-    const [queryResponse, queryParams] = Reader.parametersValidation(parameters)
+    const [
+      queryResponse, queryParams, projectedFields
+    ] = Reader.parametersValidation(parameters)
     
+    let response;
     try{
       console.log("awaiting query response");
-      return queryResponse(queryParams);
+      response = await queryResponse(queryParams, projectedFields);
     }catch(error){
       console.log(error);
       throw new Error("Query execution error");
     } finally {
       console.log = consoleLog;
+      mongoose.connection.close();
+      return response;
     }
   }
 

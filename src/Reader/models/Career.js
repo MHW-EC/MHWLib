@@ -26,23 +26,13 @@ class Career {
       ));
   }
 
-  static getAll() {
-    return Career.getSchema().find();
-  }
-
-  static getAllCb(_, callBack) {
-    Career.getSchema().find(
-      (error, docs) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, docs)
-      });
+  static getAll(_, projectedFields) {
+    const toProject = projectedFields.join(" ");
+    return Career.getSchema().find({}, toProject);
   }
 
 };
 
 module.exports = {
-  getAll: Career.getAll,
-  getAllCb: Career.getAllCb
+  getAll: Career.getAll
 };
