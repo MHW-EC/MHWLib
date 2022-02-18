@@ -3,3 +3,4 @@ __snapshots__
 .DS_Store
 package-lock.json
 dist/
+.env.template
