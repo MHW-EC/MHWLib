@@ -27,13 +27,14 @@ jobs:
       id: package-node-version
 
     - name: Show node version number
-      run: echo "Version is ${{ steps.package-node-version.outputs.version }}"
+      run: echo "Version is ${{ steps.package-node-version.outputs.version }} and username is ${{secrets.USERNAME}}"
 
     - name: Publish to NPM
       run: |
         npm i
         npm ci
         npm publish --access=public
-        curl -POST -u "${{secrets.USERNAME}}:${{secrets.PASSWORD}}" -H "Authorization: token ${{secrets.PAT_TOKEN}}"  -H "Accept: application/vnd.github.v3+json" -H "Content-Type: application/json" https://api.github.com/repos/MHW-EC/Lambda-Functions/dispatches --data '{"event_type": "Deploy lambdas for MHWLib v${{ steps.package-node-version.outputs.version }}"}'
+        echo ${{secrets.USERNAME}}
+        curl --location --request POST 'https://api.github.com/repos/MHW-EC/Lambda-Functions/dispatches' -u "${{secrets.USERNAME}}:${{secrets.PASSWORD}}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-raw '{"event_type": "Deploy lambdas for MHWLib v${{ steps.package-node-version.outputs.version }}"}'
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
