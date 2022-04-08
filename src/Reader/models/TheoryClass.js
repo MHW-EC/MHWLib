@@ -21,7 +21,7 @@ class TheoryClass {
       paralelo: {
         type: String
       },
-      paralelos_practico: {
+      paralelos_practicos: {
         type: Array
       },
       profesor: {
@@ -44,7 +44,7 @@ class TheoryClass {
       {
         codigo: classCode
       }
-    );
+    ).exec();
   }
 
   static getStatsByCode(queryParams) {
@@ -175,11 +175,10 @@ class TheoryClass {
       orConditions.push({codigo: regexTarget})
       orConditions.push({profesor: regexTarget})
     }
-    console.log({orConditions});
     
     if(orConditions.length) filters['$or'] = orConditions;
     console.log({filters})
-    return TheoryClass.getSchema().find(filters).count();
+    return TheoryClass.getSchema().find(filters).count().exec();
   }
 
   static getByQuery(queryParams, projectedFields) {
@@ -204,11 +203,10 @@ class TheoryClass {
       pagination.skip = from
       pagination.limit = pageSize
     }
-    console.log({orConditions});
     
     if(orConditions.length) filters['$or'] = orConditions;
     console.log({filters})
-    return TheoryClass.getSchema().find(filters, toProject, pagination);
+    return TheoryClass.getSchema().find(filters, toProject, pagination).exec();
   }
 };
 
@@ -216,5 +214,6 @@ module.exports = {
   getAll: TheoryClass.getAll,
   getByClassCode: TheoryClass.getByClassCode,
   getByQuery: TheoryClass.getByQuery,
-  getTotalOfRecords: TheoryClass.getTotalOfRecords
+  getTotalOfRecords: TheoryClass.getTotalOfRecords,
+  getStatsByCode: TheoryClass.getStatsByCode
 };

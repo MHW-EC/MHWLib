@@ -32,18 +32,21 @@ class PracticalClass {
       }));
   }
 
-  static getAll() {
-    return PracticalClass.getSchema().find();
+  static getAll(_, projectedFields) {
+    const toProject = projectedFields.join(" ");
+    return PracticalClass.getSchema().find({}, toProject);
   }
 
-  static getByTheoryId(queryParams) {
+  static getByTheoryId(queryParams, projectedFields) {
     const {
       id
     } = queryParams;
+    const toProject = projectedFields.join(" ");
     return PracticalClass.getSchema().find(
       {
         'teorico_id': id
-      }
+      },
+      toProject
     );
   }
   

@@ -24,8 +24,9 @@ class Teacher {
       }));
   }
 
-  static getAll() {
-    return Teacher.getSchema().find();
+  static getAll(_, projectedFields) {
+    const toProject = projectedFields.join(" ");
+    return Teacher.getSchema().find({}, toProject);
   }
 
   static getBySubject(queryParams) {
