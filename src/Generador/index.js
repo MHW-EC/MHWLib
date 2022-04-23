@@ -109,7 +109,7 @@ class Generador {
           },
         };
         idx++;
-        if (!test && Math.random() >= 0.85) return progress(dataUpdate, cback);
+        if (!test && Math.random() >= 0.80) return progress(dataUpdate, cback);
         return cback();
       },
       (err = null) => {
