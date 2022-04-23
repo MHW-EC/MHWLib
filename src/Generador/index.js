@@ -109,7 +109,7 @@ class Generador {
           },
         };
         idx++;
-        if (!test && (idx % 10) === 0) return progress(dataUpdate, cback);
+        if (!test && Math.random() >= 0.85) return progress(dataUpdate, cback);
         return cback();
       },
       (err = null) => {
@@ -129,7 +129,7 @@ class Generador {
                 },
                 () => callback(err, this.schedulesResult)
               ),
-            1000
+            2250
           );
         } else {
           callback(null, this.schedulesResult);
