@@ -35,6 +35,6 @@ jobs:
         npm ci
         npm publish --access=public
         echo ${{secrets.USERNAME}}
-        curl --location --request POST 'https://api.github.com/repos/MHW-EC/Lambda-Functions/dispatches' -u "${{secrets.USERNAME}}:${{secrets.PASSWORD}}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-raw '{"event_type": "Deploy lambdas for MHWLib v${{ steps.package-node-version.outputs.version }}"}'
+        curl --location --request POST 'https://api.github.com/repos/MHW-EC/Lambda-Functions/dispatches' -u "${{secrets.USERNAME}}:${{secrets.PASSWORD}}"  --header "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" --data-raw '{"event_type": "Deploy lambdas for MHWLib"}'
       env:
         NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
