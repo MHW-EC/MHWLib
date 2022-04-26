@@ -177,7 +177,6 @@ class TheoryClass {
     }
     
     if(orConditions.length) filters['$or'] = orConditions;
-    console.log({filters})
     return TheoryClass.getSchema().find(filters).count().exec();
   }
 
@@ -205,7 +204,6 @@ class TheoryClass {
     }
     
     if(orConditions.length) filters['$or'] = orConditions;
-    console.log({filters})
     return TheoryClass.getSchema().find(filters, toProject, pagination).exec();
   }
 };

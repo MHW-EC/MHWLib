@@ -58,7 +58,7 @@ class Generador {
    */
   generarHorarios(callback, test = false) {
     //Crearmos los maquetes
-    console.log('Creting map');
+    console.log('Creating map');
     this.crearMapa();
 
     //Lista que contiene lista de materias del mismo nombre
