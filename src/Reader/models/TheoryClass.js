@@ -166,7 +166,8 @@ class TheoryClass {
   static getTotalOfRecords(queryParams) {
     const filters = {}
     const {
-      target = ""
+      target = "",
+      distinctField = ""
     } = queryParams;
     const orConditions = [];
     if(target) {
@@ -177,7 +178,9 @@ class TheoryClass {
     }
     
     if(orConditions.length) filters['$or'] = orConditions;
-    return TheoryClass.getSchema().find(filters).count().exec();
+    return distinctField instanceof String && distinctField.length 
+      ? TheoryClass.getSchema().distinct(distinctField).find(filters).count().exec()
+      : TheoryClass.getSchema().find(filters).count().exec();
   }
 
   static getByQuery(queryParams, projectedFields) {
@@ -188,7 +191,8 @@ class TheoryClass {
       target = "",
       pagination: {
         from, pageSize
-      } = {}
+      } = {},
+      distinctField = ""
     } = queryParams;
     const orConditions = [];
     if(target) {
@@ -204,7 +208,10 @@ class TheoryClass {
     }
     
     if(orConditions.length) filters['$or'] = orConditions;
-    return TheoryClass.getSchema().find(filters, toProject, pagination).exec();
+    
+    return distinctField instanceof String && distinctField.length 
+      ? TheoryClass.getSchema().distinct(distinctField).find(filters, toProject, pagination).exec()
+      : TheoryClass.getSchema().find(filters, toProject, pagination).exec();
   }
 };
 
